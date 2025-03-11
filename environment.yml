@@ -5,4 +5,5 @@ dependencies:
   - matplotlib
   - numpy
   - pytest
+  - pytest-cov
   - pylint
