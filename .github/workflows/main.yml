@@ -30,9 +30,9 @@ jobs:
     - name: Set up Miniconda
       uses: conda-incubator/setup-miniconda@v3
       with:
-        auto-update-conda: true
+        auto-update-conda: false
         python-version: ${{ matrix.python-version }}
-        auto-activate-base: false
+        auto-activate-base: true
         activate-environment: intermediate
         environment-file: environment.yml
 
