@@ -33,10 +33,9 @@ jobs:
         auto-update-conda: false
         python-version: ${{ matrix.python-version }}
         auto-activate-base: true
-        activate-environment: intermediate
+        activate-environment: base
         environment-file: environment.yml
 
     - name: Test with PyTest
       run: |
-        conda activate intermediate
         python -m pytest --cov=inflammation.models tests/test_models.py
