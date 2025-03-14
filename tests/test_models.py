@@ -85,7 +85,7 @@ def test_patient_normalise(test, expected, expect_raises):
 
     if isinstance(test, list):
         test = np.array(test)
-    
+
     if expect_raises is not None:
         with pytest.raises(expect_raises):
             result = patient_normalise(test)
