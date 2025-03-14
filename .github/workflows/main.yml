@@ -40,6 +40,10 @@ jobs:
         activate-environment: intermediate
         environment-file: environment.yml
 
+    - name: Check style with Pylint
+      run: |
+        python -m pyline --fail-under=0 --reports=y inflammation
+    
     - name: Test with PyTest
       run: |
         python -m pytest --cov=inflammation.models tests/test_models.py
