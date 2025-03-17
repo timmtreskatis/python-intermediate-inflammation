@@ -6,4 +6,4 @@ dependencies:
   - numpy
   - pytest
   - pytest-cov
-  - pylint
+  - ruff

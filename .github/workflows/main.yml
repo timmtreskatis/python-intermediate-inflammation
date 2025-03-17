@@ -40,9 +40,9 @@ jobs:
         activate-environment: intermediate
         environment-file: environment.yml
 
-    - name: Check style with Pylint
+    - name: Check style with Ruff
       run: |
-        python -m pylint --reports=y inflammation
+        python -m ruff check inflammation
     
     - name: Test with PyTest
       run: |
