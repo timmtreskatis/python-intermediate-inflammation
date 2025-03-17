@@ -39,6 +39,7 @@ jobs:
         auto-activate-base: true
         activate-environment: intermediate
         environment-file: environment.yml
+        conda-remove-defaults: "true"
 
     - name: Check style with Ruff
       run: |
