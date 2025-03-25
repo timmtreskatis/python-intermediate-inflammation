@@ -7,8 +7,9 @@ inflammation data for a single patient taken over a number of days
 and each column represents a single day across all patients.
 """
 
-import numpy as np
 import json
+
+import numpy as np
 
 
 def load_csv(filename):

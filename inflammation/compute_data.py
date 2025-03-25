@@ -5,7 +5,7 @@ import glob
 import os
 import numpy as np
 
-from inflammation import models, views
+from inflammation import models#, views
 
 
 class CSVDataSource:
@@ -61,4 +61,5 @@ def analyse_data(data_source):
     graph_data = {
         'standard deviation by day': daily_standard_deviation,
     }
-    views.visualize(graph_data)
+    #views.visualize(graph_data)
+    return graph_data
