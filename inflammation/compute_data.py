@@ -5,7 +5,7 @@ import glob
 import os
 import numpy as np
 
-from inflammation import models#, views
+from inflammation import models  # , views
 
 
 class CSVDataSource:
@@ -17,6 +17,8 @@ class CSVDataSource:
         self.dir_path = dir_path
 
     def load_inflammation_data(self):
+        """Loads inflammation CSV files
+        """
         data_file_paths = glob.glob(os.path.join(
             self.dir_path, 'inflammation*.csv'))
         if len(data_file_paths) == 0:
@@ -25,6 +27,7 @@ class CSVDataSource:
             )
         data = map(models.load_csv, data_file_paths)
         return list(data)
+
 
 class JSONDataSource:
     """
@@ -35,6 +38,8 @@ class JSONDataSource:
         self.dir_path = dir_path
 
     def load_inflammation_data(self):
+        """Loads inflammation JSON files
+        """
         data_file_paths = glob.glob(os.path.join(
             self.dir_path, 'inflammation*.json'))
         if len(data_file_paths) == 0:
@@ -44,22 +49,29 @@ class JSONDataSource:
         data = map(models.load_json, data_file_paths)
         return list(data)
 
+
+def compute_standard_deviation_by_day(data):
+    """Calculates the standard deviation by day between datasets.
+
+    Works out the mean inflammation value for each day across all datasets, then computes the
+    standard deviation of these means.
+    """
+    means_by_day = map(models.daily_mean, data)
+    means_by_day_matrix = np.stack(list(means_by_day))
+    daily_standard_deviation = np.std(means_by_day_matrix, axis=0)
+    return daily_standard_deviation
+
+
 def analyse_data(data_source):
     """Calculates the standard deviation by day between datasets.
 
-    Gets all the inflammation data from a data source, works out the mean
-    inflammation value for each day across all datasets, then plots the graphs
-    of standard deviation of these means.
+    Gets all the inflammation data from a data source and returns the standard deviation of these
+    means.
     """
     data = data_source.load_inflammation_data()
-
-    means_by_day = map(models.daily_mean, data)
-    means_by_day_matrix = np.stack(list(means_by_day))
-
-    daily_standard_deviation = np.std(means_by_day_matrix, axis=0)
-
-    graph_data = {
-        'standard deviation by day': daily_standard_deviation,
-    }
-    #views.visualize(graph_data)
-    return graph_data
+    daily_standard_deviation = compute_standard_deviation_by_day(data)
+    # graph_data = {
+    #     'standard deviation by day': daily_standard_deviation,
+    # }
+    # views.visualize(graph_data)
+    return daily_standard_deviation
