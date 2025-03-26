@@ -29,3 +29,19 @@ def test_daily_mean_integers():
     # Need to use Numpy testing functions to compare arrays
     npt.assert_array_equal(daily_mean(test_input), test_result)
 
+
+def test_daily_above_threshold():
+    """Test that threshold function works for an array of positive integers."""
+    from inflammation.models import daily_above_threshold
+
+    test_data = np.array([[0, 3, 6, 1],
+                          [0, 5, 10, 4],
+                          [12, 12, 12, 12]])
+    test_patient = 1
+    test_threshold = 4
+    test_result = [False, True, True, False]
+
+    npt.assert_array_equal(
+        daily_above_threshold(test_data, test_patient, test_threshold),
+        test_result
+    )

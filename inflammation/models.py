@@ -52,3 +52,14 @@ def daily_max(data):
 def daily_min(data):
     """Calculate the daily min of a 2d inflammation data array."""
     return np.min(data, axis=0)
+
+
+def daily_above_threshold(data, patient, threshold):
+    """Determine whether or not each daily inflammation value exceeds a given threshold for a given patient.
+
+    :param data: A 2D data array with inflammation data
+    :param patient: The patient row number
+    :param threshold: An inflammation threshold to check each daily value against
+    :returns: A boolean list representing whether or not each patient's daily inflammation exceeded the threshold
+    """
+    return list(map(lambda x: x > threshold, data[patient]))
