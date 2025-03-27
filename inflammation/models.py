@@ -8,6 +8,7 @@ and each column represents a single day across all patients.
 """
 
 import json
+from functools import reduce
 
 import numpy as np
 
@@ -55,11 +56,17 @@ def daily_min(data):
 
 
 def daily_above_threshold(data, patient, threshold):
-    """Determine whether or not each daily inflammation value exceeds a given threshold for a given patient.
+    """Determine the number of days on which the inflammation value exceeds a given threshold for
+    a given patient.
 
     :param data: A 2D data array with inflammation data
     :param patient: The patient row number
     :param threshold: An inflammation threshold to check each daily value against
-    :returns: A boolean list representing whether or not each patient's daily inflammation exceeded the threshold
+    :returns: The number of days on which the patient's daily inflammation exceeded the threshold
     """
-    return list(map(lambda x: x > threshold, data[patient]))
+    is_above_threshold = list(map(lambda x: x > threshold, data[patient]))
+    return reduce(
+        lambda sum_days_above, is_above: sum_days_above + 1 if is_above else sum_days_above,
+        is_above_threshold,
+        0
+    )
