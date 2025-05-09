@@ -6,12 +6,53 @@ Patients' data is held in an inflammation table (2D array) where each row contai
 inflammation data for a single patient taken over a number of days 
 and each column represents a single day across all patients.
 """
-
+import glob
+import os
 import json
 from functools import reduce
 
 import numpy as np
 
+class CSVDataSource:
+    """
+    Loads all the inflammation CSV files within a specified directory.
+    """
+
+    def __init__(self, dir_path):
+        self.dir_path = dir_path
+
+    def load_inflammation_data(self):
+        """Loads inflammation CSV files
+        """
+        data_file_paths = glob.glob(os.path.join(
+            self.dir_path, 'inflammation*.csv'))
+        if len(data_file_paths) == 0:
+            raise ValueError(
+                f"No inflammation data CSV files found in path {self.dir_path}"
+            )
+        data = map(load_csv, data_file_paths)
+        return list(data)
+
+
+class JSONDataSource:
+    """
+    Loads all the inflammation JSON files within a specified directory.
+    """
+
+    def __init__(self, dir_path):
+        self.dir_path = dir_path
+
+    def load_inflammation_data(self):
+        """Loads inflammation JSON files
+        """
+        data_file_paths = glob.glob(os.path.join(
+            self.dir_path, 'inflammation*.json'))
+        if len(data_file_paths) == 0:
+            raise ValueError(
+                f"No inflammation data JSON files found in path {self.dir_path}"
+            )
+        data = map(load_json, data_file_paths)
+        return list(data)
 
 def load_csv(filename):
     """Load a Numpy array from a CSV
@@ -66,7 +107,31 @@ def daily_above_threshold(data, patient, threshold):
     """
     is_above_threshold = list(map(lambda x: x > threshold, data[patient]))
     return reduce(
-        lambda sum_days_above, is_above: sum_days_above + 1 if is_above else sum_days_above,
+        lambda sum_days_above, is_above: sum_days_above +
+        1 if is_above else sum_days_above,
         is_above_threshold,
         0
     )
+
+
+def compute_standard_deviation_by_day(data):
+    """Calculates the standard deviation by day between datasets.
+
+    Works out the mean inflammation value for each day across all datasets, then computes the
+    standard deviation of these means.
+    """
+    means_by_day = map(daily_mean, data)
+    means_by_day_matrix = np.stack(list(means_by_day))
+    daily_standard_deviation = np.std(means_by_day_matrix, axis=0)
+    return daily_standard_deviation
+
+
+def analyse_data(data_source):
+    """Calculates the standard deviation by day between datasets.
+
+    Gets all the inflammation data from a data source and returns the standard deviation of these
+    means.
+    """
+    data = data_source.load_inflammation_data()
+    daily_standard_deviation = compute_standard_deviation_by_day(data)
+    return daily_standard_deviation

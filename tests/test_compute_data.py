@@ -7,7 +7,7 @@ import numpy as np
 import numpy.testing as npt
 import pytest
 
-from inflammation.compute_data import CSVDataSource, analyse_data, compute_standard_deviation_by_day
+from inflammation.models import CSVDataSource, analyse_data, compute_standard_deviation_by_day
 
 
 def test_analyse_data_mock_source():

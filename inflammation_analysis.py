@@ -5,7 +5,7 @@ import argparse
 import os
 
 from inflammation import models, views
-from inflammation.compute_data import analyse_data, CSVDataSource, JSONDataSource
+from inflammation.models import analyse_data, CSVDataSource, JSONDataSource
 
 
 def main(args):
@@ -16,6 +16,7 @@ def main(args):
     - passing data between models and views
     """
     infiles = args.infiles
+
     if not isinstance(infiles, list):
         infiles = [args.infiles]
 
@@ -29,7 +30,11 @@ def main(args):
         else:
             raise ValueError(f'Unsupported data file format: {extension}')
 
-        analyse_data(data_source)
+        data_result = analyse_data(data_source)
+        graph_data = {
+            'standard deviation by day': data_result,
+        }
+        views.visualize(graph_data)
         return
 
     for filename in infiles:
@@ -58,6 +63,4 @@ if __name__ == "__main__":
         action='store_true',
         dest='full_data_analysis')
 
-    args = parser.parse_args()
-
-    main(args)
+    main(parser.parse_args())
